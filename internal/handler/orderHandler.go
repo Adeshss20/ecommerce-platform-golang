@@ -21,7 +21,7 @@ func (handler *OrderHandler) GetOrder(c *gin.Context) {
 	order, err := handler.service.GetOrder(orderId)
 	
 	if err!=nil {
-		c.JSON(http.StatusOK,
+		c.JSON(http.StatusBadRequest,
 			gin.H{
 				"message" : fmt.Sprintf("order not found for order id - %s", orderId),
 			})
@@ -48,7 +48,7 @@ func (handler *OrderHandler) AddOrder(c *gin.Context) {
 
 func (handler *OrderHandler) GetAllOrders(c *gin.Context) {
 	orders, _ := handler.service.GetAllOrders()
-	c.JSON(http.StatusAccepted,
+	c.JSON(http.StatusOK,
 		gin.H{
 			"orders" : orders,
 		})

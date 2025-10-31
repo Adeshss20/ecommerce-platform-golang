@@ -17,9 +17,9 @@ func NewProductService() *ProductService {
 }
 
 func (service *ProductService) GetProduct(productId string) (*models.Product, error) {
-	for _, product := range products {
-		if productId == product.Id {
-			return &product,nil
+	for i := range products {
+		if productId == products[i].Id {
+			return &products[i],nil
 		}
 	}
 	return nil, fmt.Errorf("product not found with product id - %s", productId)
@@ -47,5 +47,5 @@ func (service *ProductService) CheckProductAvailibility(productId string, quanti
 
 func (service *ProductService) ReduceQuantity(productId string, quantity int32) {
 	product, _ := service.GetProduct(productId)
-	product.Quantity = product.Quantity-quantity
+	(*product).Quantity = (*product).Quantity-quantity
 }

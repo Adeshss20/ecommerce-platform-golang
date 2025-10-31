@@ -46,7 +46,7 @@ func (handler *ProductHandler) AddProduct(c *gin.Context) {
 
 func (handler *ProductHandler) GetAllProducts(c *gin.Context) {
 	products, _ := handler.service.GetAllProducts()
-	c.JSON(http.StatusAccepted,
+	c.JSON(http.StatusOK,
 		gin.H{
 			"products" : products,
 		})

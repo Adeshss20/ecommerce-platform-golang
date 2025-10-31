@@ -52,7 +52,7 @@ func (handler *BillHandler) AddBill(c *gin.Context) {
 
 func (handler *BillHandler) GetAllBills(c *gin.Context) {
 	bills, _ := handler.service.GetAllBills()
-	c.JSON(http.StatusAccepted,
+	c.JSON(http.StatusOK,
 	gin.H{
 		"bills" : bills,
 	})
