@@ -39,9 +39,17 @@ func (handler *OrderHandler) AddOrder(c *gin.Context) {
 			gin.H{
 				"error" : err.Error(),
 			})
+		return
 	}
-	id, _ := handler.service.AddOrder(req)
 
+	id, err := handler.service.AddOrder(req)
+	if err!=nil {
+		c.JSON(http.StatusBadRequest,
+			gin.H{
+				"error" : err.Error(),
+			})
+		return
+	}
 	c.JSON(http.StatusCreated,
 		gin.H{"message" : fmt.Sprintf("Order created with id - %s", id)})
 }
