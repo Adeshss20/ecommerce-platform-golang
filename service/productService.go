@@ -34,3 +34,18 @@ func (service *ProductService) AddProduct(product models.Product) (string, error
 func (service *ProductService) GetAllProducts() ([]models.Product, error) {
 	return products, nil
 }
+
+func (service *ProductService) CheckProductAvailibility(productId string, quantity int32) bool {
+	product, err := service.GetProduct(productId)
+
+	if err!=nil {
+		return false
+	}
+
+	return (product.Quantity-quantity)>=0
+}
+
+func (service *ProductService) ReduceQuantity(productId string, quantity int32) {
+	product, _ := service.GetProduct(productId)
+	product.Quantity = product.Quantity-quantity
+}

@@ -31,7 +31,11 @@ func (service *OrderSerice) AddOrder(order models.Order) (string, error) {
 	totalCost, _ := service.GetTotalCost(order)
 	billId := service.billService.GenerateBill(order.Id, totalCost)
 	order.BillId = billId
+	if !service.productService.CheckProductAvailibility(order.ProductId, order.Quantity) {
+		return "", fmt.Errorf("Product not available at moment!")
+	}
 	orders = append(orders, order)
+	service.productService.ReduceQuantity(order.ProductId, order.Quantity)
 	return order.Id, nil
 }
 
