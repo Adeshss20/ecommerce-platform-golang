@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: e-commerce-deployment
+  labels:
+    app: e-commerce
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: e-commerce
+  template:
+    metadata:
+      labels:
+        app: e-commerce
+    spec:
+      containers:
+        - name: e-commerce
+          image: adeshs/e-commerce:latest 
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: PORT
+              value: "8080"
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: e-commerce-service
+  labels:
+    app: e-commerce
+spec:
+  selector:
+    app: e-commerce
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80          
+      targetPort: 8080  
+  type: NodePort
