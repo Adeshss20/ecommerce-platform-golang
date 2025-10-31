@@ -28,9 +28,10 @@ func (service *OrderSerice) GetOrder(orderId string) (*models.Order, error) {
 
 func (service *OrderSerice) AddOrder(order models.Order) (string, error) {
 	order.Id = uuid.New().String()
-	orders = append(orders, order)
 	totalCost, _ := service.GetTotalCost(order)
-	service.billService.GenerateBill(order.Id, totalCost)
+	billId := service.billService.GenerateBill(order.Id, totalCost)
+	order.BillId = billId
+	orders = append(orders, order)
 	return order.Id, nil
 }
 
