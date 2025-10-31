@@ -19,16 +19,6 @@ func SetupRouter() *gin.Engine {
 		productApi.POST("/", productHandler.AddProduct)
 	}
 
-	orderService := service.NewOrderService()
-	OrderHandler := handler.NewOrderHandler(orderService)
-
-	orderApi := r.Group("/order") 
-	{
-		orderApi.GET("/", OrderHandler.GetAllOrders)
-		orderApi.GET("/:order-id", OrderHandler.GetOrder)
-		orderApi.POST("/", OrderHandler.AddOrder)
-	}
-
 	billService := service.NewBillService()
 	billHandler := handler.NewBillHandler(billService)
 
@@ -37,6 +27,16 @@ func SetupRouter() *gin.Engine {
 		billApi.GET("/", billHandler.GetAllBills)
 		billApi.POST("/", billHandler.AddBill)
 		billApi.GET("/:order-id", billHandler.GetBillForOrder)
+	}
+
+	orderService := service.NewOrderService(productService, billService)
+	OrderHandler := handler.NewOrderHandler(orderService)
+
+	orderApi := r.Group("/order") 
+	{
+		orderApi.GET("/", OrderHandler.GetAllOrders)
+		orderApi.GET("/:order-id", OrderHandler.GetOrder)
+		orderApi.POST("/", OrderHandler.AddOrder)
 	}
 
 	return r

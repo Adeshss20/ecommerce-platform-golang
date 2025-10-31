@@ -9,11 +9,12 @@ import (
 var orders []models.Order
 
 type OrderSerice struct {
-
+	productService *ProductService
+	billService *BillService
 }
 
-func NewOrderService() *OrderSerice {
-	return &OrderSerice{}
+func NewOrderService(productService *ProductService, billService *BillService) *OrderSerice {
+	return &OrderSerice{ productService: productService, billService: billService}
 }
 
 func (service *OrderSerice) GetOrder(orderId string) (*models.Order, error) {
@@ -33,4 +34,17 @@ func (service *OrderSerice) AddOrder(order models.Order) (string, error) {
 
 func (service *OrderSerice) GetAllOrders() ([]models.Order, error) {
 	return orders, nil
+}
+
+func (service *OrderSerice) GetTotalCost(order models.Order) (int64, error) {
+	productService := service.productService
+
+	product, err := productService.GetProduct(order.ProductId)
+	if err!=nil {
+		return 0, fmt.Errorf("unable to fetch product for order - %s", order.ProductId)
+	}
+
+	totalCost := (order.Quantity * int32(product.Price))
+	
+	return int64(totalCost), nil
 }

@@ -34,3 +34,8 @@ func (service *BillService) AddBill(bill models.Bill) (string, error) {
 func (service *BillService) GetAllBills() ([]models.Bill, error) {
 	return bills, nil
 }
+
+func (service *BillService) GenerateBill(orderId string, totalCost int64) *models.Bill {
+	id := uuid.New().String()
+	return &models.Bill{Id: id, OrderId: orderId, TotalCost: totalCost}
+}
